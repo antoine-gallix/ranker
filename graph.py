@@ -10,9 +10,9 @@ class Base_Graph:
     """
 
     def __init__(self, elements):
-        self.nodes = copy.copy(elements)
+        self.nodes = set(elements)
         self.indexes = {element: i for i, element in enumerate(elements)}
-        self.edges = []
+        self.edges = set()
 
     def __repr__(self):
         r = []
@@ -39,16 +39,19 @@ class Base_Graph:
         for testing purposes
         """
         if n == 1:
-            return random.choice(self.nodes)
+            return random.choice(list(self.nodes))
         else:
-            return random.sample(self.nodes, n)
+            return random.sample(list(self.nodes), n)
 
     # Graph edition
 
     def add_edge(self, superior_element, inferior_element):
-        """Adds an edge between two nodes"""
+        """Adds an edge between two nodes
 
-        self.edges.append((inferior_element, superior_element))
+        g.add_edge(A,B) := A > B
+        """
+
+        self.edges.add((superior_element, inferior_element))
 
     def remove_node(self, node):
         """Remove a node and all edges referencing it
@@ -56,26 +59,38 @@ class Base_Graph:
         returns the original index of the node at graph creation"""
 
         self.nodes.remove(node)
-        self.edges = [edge for edge in self.edges if node not in edge]
+        self.edges = set([edge for edge in self.edges if node not in edge])
         return self.indexes[node]
 
     # Node access
 
     def get_direct_lower_nodes(self, node):
-        return [edge[0] for edge in self.edges if edge[1] == node]
+        return [edge[1] for edge in self.edges if edge[0] == node]
 
     def get_direct_higher_nodes(self, node):
-        return [edge[1] for edge in self.edges if edge[0] == node]
+        return [edge[0] for edge in self.edges if edge[1] == node]
 
     def get_top_nodes(self):
         """Return all nodes that have no better nodes known"""
-
-        return list(set(self.nodes) - set([edge[0] for edge in self.edges]))
+        all_nodes = set(self.nodes)
+        inferior_nodes = set([edge[1] for edge in self.edges])
+        return list(all_nodes - inferior_nodes)
 
     def get_end_nodes(self):
         """Return all nodes that have no worse nodes known"""
+        all_nodes = set(self.nodes)
+        superior_nodes = set([edge[0] for edge in self.edges])
+        return list(all_nodes - superior_nodes)
 
-        return list(set(self.nodes) - set([edge[1] for edge in self.edges]))
+    def is_top_node(self, node):
+        """test if node is a top node"""
+        inferior_nodes = set([edge[1] for edge in self.edges])
+        return node not in inferior_nodes
+
+    def is_end_node(self, node):
+        """test if node is an end node"""
+        superior_nodes = set([edge[0] for edge in self.edges])
+        return node not in superior_nodes
 
 
 class Graph(Base_Graph):
@@ -84,8 +99,8 @@ class Graph(Base_Graph):
     def update_graph(self, element_list, rank):
         """Add ranking information to the graph"""
         ordered_elements = utils.reorder(element_list, rank)
-        for i in list(range(len(ordered_elements)))[1:]:
+        for i in list(range(len(ordered_elements)))[:-1]:
             self.add_edge(
-                superior_element=ordered_elements[i - 1],
-                inferior_element=ordered_elements[i]
+                superior_element=ordered_elements[i],
+                inferior_element=ordered_elements[i + 1]
             )

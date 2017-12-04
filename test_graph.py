@@ -38,6 +38,13 @@ def test_graph_creation(eg):
     assert g.size() == 10
 
 
+def test_graph_creation_no_repeated_nodes(eg):
+    A = eg.get_one()
+    B = A
+    g = Graph([A, B])
+    assert g.size() == 1
+
+
 def test_get_nodes(g):
     n = g.get_nodes(3)
     assert len(n) == 3
@@ -46,6 +53,20 @@ def test_get_nodes(g):
 def test_add_edge(g):
     A, B = g.get_nodes(2)
     g.add_edge(A, B)
+
+
+def test_add_edge_no_repetition(g):
+    A, B = g.get_nodes(2)
+    g.add_edge(A, B)
+    g.add_edge(A, B)
+    assert g.edge_count() == 1
+
+
+def test_is_top_node(g):
+    A, B = g.get_nodes(2)
+    g.add_edge(A, B)
+    assert g.is_top_node(A)
+    assert g.is_top_node(B) is False
 
 
 def test_remove_node(g):
