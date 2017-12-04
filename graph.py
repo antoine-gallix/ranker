@@ -14,6 +14,16 @@ class Base_Graph:
         self.indexes = {element: i for i, element in enumerate(elements)}
         self.edges = []
 
+    def __repr__(self):
+        r = []
+        r.append("---nodes---")
+        for node in self.nodes:
+            r.append(str(node))
+        r.append("---edges---")
+        for edge in self.edges:
+            r.append(('{} > {}\n'.format(edge[0], edge[1])))
+        return '\n'.join(r)
+
     def __contains__(self, node):
         return node in self.nodes
 
@@ -60,12 +70,12 @@ class Base_Graph:
     def get_top_nodes(self):
         """Return all nodes that have no better nodes known"""
 
-        return set(self.nodes) - set([edge[0] for edge in self.edges])
+        return list(set(self.nodes) - set([edge[0] for edge in self.edges]))
 
     def get_end_nodes(self):
         """Return all nodes that have no worse nodes known"""
 
-        return set(self.nodes) - set([edge[1] for edge in self.edges])
+        return list(set(self.nodes) - set([edge[1] for edge in self.edges]))
 
 
 class Graph(Base_Graph):
