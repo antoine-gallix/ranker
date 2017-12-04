@@ -27,7 +27,7 @@ def rank_elements(elements):
     >>>rank[-1]
     e3
 
-    This function simply ranks elements by their 
+    This function simply order elements by their value
     """
     if len(elements) > 5:
         raise ValueError(
