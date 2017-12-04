@@ -59,6 +59,10 @@ A first modification of the algorithm would be, if the number of top node is inf
 
 In the case of neither top or end nodes are enough to form a full batch of 5, we could then explore methods to find unrelated nodes from the middle of the chains.
 
+# Profiling
+
+We create a profiling decorator to track the number of times the base ranking function was called. This allows us to compare versions of the algorithm.
+
 ## requirements
 
 pytest
@@ -72,7 +76,5 @@ pytest
 
 - run unit tests
     py.test
-- run manual internal tests
-    python scratch_unit.py
-- run manual final test
-    python scratch.py
+- run profile script
+    python script_profile_ranker.py
