@@ -15,6 +15,10 @@ def create_element_set(n):
 def is_ranking_correct(element_list, ranking):
     """Test if the ranking is correct"""
 
+    if ranking is None:
+        raise ValueError(
+            'ranking is None')
+
     # same length
     if len(ranking) != len(element_list):
         raise ValueError(
@@ -40,10 +44,19 @@ def reorder(sequence, index):
     return [sequence[i] for i in index]
 
 
+def reduce_list(list_of_lists):
+    """reduce a list of list into a list"""
+    reduced = []
+    for l in list_of_lists:
+        reduced.extend(l)
+    return reduced
+
+
 def profile_ranker(ranking_function, set_size, repetitions):
     info = []
     base_lib.rank_elements = profile(base_lib.rank_elements)
     for _ in range(repetitions):
+        print('.', end='', flush=True)
         base_lib.rank_elements.reset_profile()
         elements = create_element_set(set_size)
         rank = ranking_function(elements)
@@ -52,6 +65,7 @@ def profile_ranker(ranking_function, set_size, repetitions):
             'set_size': set_size,
             'rank_call_count': base_lib.rank_elements.count_calls()
         })
+    print()
     return info
 
 

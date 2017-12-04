@@ -43,3 +43,9 @@ def test_is_ranking_correct():
 def test_reorder():
     seq = ['b', 'c', 'a']
     assert utils.reorder(seq, [2, 0, 1]) == ['a', 'b', 'c']
+
+
+def test_reduce_list():
+    list_of_lists = [[1, 2], [3, 4]]
+    reduced = utils.reduce_list(list_of_lists)
+    assert reduced == [1, 2, 3, 4]
