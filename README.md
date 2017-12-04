@@ -29,70 +29,47 @@ A simple brute force algorithm would be to add edges until this condition is met
 
 A simple strategy to choose nodes is to rank against each other nodes that have no better known alternative, we call them top nodes, and repeat until only one is left, which will be the higher ranked node. We can remove it from the graph and repeat the process. This idea is implemented in version 0 of the ranking function.
 
+    VERSION 0
+    initialize the graph nodes with the given trip set
+    until the graph is empty:
+        get up to 5 trip from the graph that have no better options
+            - if there is only one such trip, it's the best one of the set, we take it out from the graph and store it in the sorted list.
+            - if there is more than one:
+                - rank the trips
+                - update the graph
+
 ### Best or worst
 
 The problem with the previous strategy is that after the first phase where we rank mostly single nodes, we reach a point where the graph is fully connected and the number of top nodes remaining in the graph after removing the better node of all at each step is low, and we wont make the best use of our base ranking function calling it with fewer than 5 elements. But if we start to choose top nodes, by definition, their relation with all nodes below them is already known and it's therefore useless to add one of those lower nodes to the next batch to rank.
 
 A first modification of the algorithm would be, if the number of top node is inferior to 5, to start the process in the other direction and start ranking against each other nodes that have no worst node known, that we can call end nodes. We now can start taking out nodes from the graph from the two sides, the best and the worst. We choose the side that offer the most nodes.
 
+    VERSION 1
+    initialize the graph nodes with the given trip set
+    until the graph is empty:
+        How many nodes have no better alternative (top nodes)?
+        How many nodes have no worse alternative (end nodes)?
+        Get up to 5 trip from the options that has more nodes
+            - if there is only one such trip, it's the best one of the set, we take it out from the graph and store it in the sorted list.
+            - if there is more than one:
+                - rank the trips
+                - update the graph
+
 ### Unrelated nodes in the middle
 
 In the case of neither top or end nodes are enough to form a full batch of 5, we could then explore methods to find unrelated nodes from the middle of the chains.
 
-## Graph implementation
-
-To store this information we use a data structure, a dictionary, that holds for each trip of the set, the set of trips that we know are better ranked than it. At the end it's just like a simplified directed graph, where the nodes are trips and directed edges represent relation of ranking. We only store for each nodes, the direct predecessors in the graph.
-
-For example :
-We start to rank a set of 3 trips:
-    
-    ranking_graph={
-        t1:[],
-        t2:[],
-        t3:[],
-    }
-
-We now update the graph after ranking the three trips (descending order, i.e. trips[rank[0]] is the best trip):
-
-trips=[t1,t2,t3]
-rank=rank_trips(trips)
-update_ranking_graph(ranking_graph,trips,rank)
-
-    ranking_graph={
-        t1:[],
-        t2:[t1],
-        t3:[t2],
-    }
-
-We can then run the following algorithm:
-
-initialize the graph with the given trip set
-until the graph is empty:
-    get up to 5 trip from the graph that have no better options
-        - if there is only one such trip, it's the best one of the set, we take it out from the graph and store it in the sorted list.
-        - if there is more than one:
-            - rank the trips
-            - update the graph
-
-It's not yet an optimal algorithm but it will work.
-
-----| optimization 1
-If the ranking time of the base function is constant (assumption), independantly of the number of trip submitted, we should use the function at it's best, ensuring this base ranking function is always called on a list of 5 trips.
-A possibility would be, when less than 5 trips have no better option known
-
-----| optimization 2
-To maximize the amount of information gained by calling the ranking function, we should ensure that the submitted trips have no ranking relation known yet, if possible. Which mean there is no chain of known ranking relation between the trips in our ranking graph.
-
-
----------------------requirements---------------------
+## requirements
 
 pytest
 
----------------------installation---------------------
+## installation
 
 - start a virtual environement (python 3)
 - install requirements:
+    
     pip install pytest
+
 - run unit tests
     py.test
 - run manual internal tests
