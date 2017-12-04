@@ -27,11 +27,11 @@ def test_ranker_version_1(set_1000):
     assert utils.is_ranking_correct(set_1000, rank)
 
 
-def test_ranker_version_2_dev(set_dev):
-    rank = ranker.rank_elements(set_dev, version=2)
-    assert utils.is_ranking_correct(set_dev, rank)
+# def test_ranker_version_2_dev(set_dev):
+#     rank = ranker.rank_elements(set_dev, version=2)
+#     assert utils.is_ranking_correct(set_dev, rank)
 
 
-def test_ranker_version_2(set_1000):
-    rank = ranker.rank_elements(set_1000, version=2)
-    assert utils.is_ranking_correct(set_1000, rank)
+# def test_ranker_version_2(set_1000):
+#     rank = ranker.rank_elements(set_1000, version=2)
+#     assert utils.is_ranking_correct(set_1000, rank)

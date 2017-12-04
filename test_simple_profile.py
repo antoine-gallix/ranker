@@ -1,6 +1,6 @@
 import pytest
 from simple_profile import profile
-
+import time
 # ----| fixtures
 
 
@@ -73,6 +73,7 @@ def test_reset_profiles(f):
 def test_average_time(f):
     f = profile(f)
     f()
+    time.sleep(.001)
     f()
     avg = f.average_execution_time()
     assert avg > 0

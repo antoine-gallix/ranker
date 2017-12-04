@@ -6,7 +6,7 @@ import statistics
 repetitions = 10
 set_size = 1000
 
-for version in [0, 1, 2]:
+for version in [0, 1]:
     utils.title('version {}'.format(version))
     print(f'ranking sets of {set_size} trips ({repetitions} reps)')
     ranking_function = lambda x: ranker.rank_elements(x, version=version)

@@ -77,52 +77,52 @@ def rank_elements_version_1(element_list):
     rank = top_rank + low_rank[::-1]
     return rank
 
+# STILL BUGGED SOMEWHERE...
+# def rank_elements_version_2(element_list):
+#     """main ranking function
 
-def rank_elements_version_2(element_list):
-    """main ranking function
+#     improvement on version 0
+#     We try to always use the base ranking function on 5 elements
+#     When the list of nodes to rank is between 2 and 4, we add more
+#      nodes to rank from the direct sucessors of the top nodes.
+#     """
+#     graph = Graph(element_list)
+#     rank = []
+#     while graph.size() > 0:
+#         print()
+#         print('graph size : {}'.format(graph.size()))
+#         # bp()
+#         # if len(graph.get_top_nodes()) == 0:
+#         #     bp()
+#         top_nodes = graph.get_top_nodes()
 
-    improvement on version 0
-    We try to always use the base ranking function on 5 elements
-    When the list of nodes to rank is between 2 and 4, we add more
-     nodes to rank from the direct sucessors of the top nodes.
-    """
-    graph = Graph(element_list)
-    rank = []
-    while graph.size() > 0:
-        print()
-        print('graph size : {}'.format(graph.size()))
-        # bp()
-        # if len(graph.get_top_nodes()) == 0:
-        #     bp()
-        top_nodes = graph.get_top_nodes()
-
-        print('top nodes : {}'.format(len(top_nodes)))
-        if len(top_nodes) == 1:
-            print('>>popping element')
-            better_element_in_graph = top_nodes[0]
-            original_index = graph.remove_node(better_element_in_graph)
-            rank.append(original_index)
-        else:
-            to_rank = [top_nodes]  # lists of nodes, and their sucessors
-            # conditions to keep adding nodes to the ranking batch:
-            # there is less than 5 nodes to compare
-            while sum([len(level) for level in to_rank]) \
-                    < min(5, graph.size()):
-                # optimization : we add sucessor of top nodes to the list of
-                # nodes to rank until we have at least 5 nodes. We can do
-                # various rounds of it.
-                next_level = []  # sucessors of the last added nodes
-                for node in to_rank[-1]:
-                    sucessors = graph.get_direct_lower_nodes(node)
-                    next_level.extend(sucessors)
-                to_rank.append(next_level)
-                if len(to_rank[-1]) == 0:
-                    break  # if we cant add more nodes, stop the loop
-                print('add {} more nodes to rank'.format(len(to_rank[-1])))
-            to_rank = utils.reduce_list(to_rank)
-            # limit to 5 elements
-            to_rank = to_rank[:min(5, len(to_rank))]
-            print('ranking {}'.format(len(to_rank)))
-            batch_rank = base_lib.rank_elements(to_rank)
-            graph.update_graph(to_rank, batch_rank)
-    return rank
+#         print('top nodes : {}'.format(len(top_nodes)))
+#         if len(top_nodes) == 1:
+#             print('>>popping element')
+#             better_element_in_graph = top_nodes[0]
+#             original_index = graph.remove_node(better_element_in_graph)
+#             rank.append(original_index)
+#         else:
+#             to_rank = [top_nodes]  # lists of nodes, and their sucessors
+#             # conditions to keep adding nodes to the ranking batch:
+#             # there is less than 5 nodes to compare
+#             while sum([len(level) for level in to_rank]) \
+#                     < min(5, graph.size()):
+#                 # optimization : we add sucessor of top nodes to the list of
+#                 # nodes to rank until we have at least 5 nodes. We can do
+#                 # various rounds of it.
+#                 next_level = []  # sucessors of the last added nodes
+#                 for node in to_rank[-1]:
+#                     sucessors = graph.get_direct_lower_nodes(node)
+#                     next_level.extend(sucessors)
+#                 to_rank.append(next_level)
+#                 if len(to_rank[-1]) == 0:
+#                     break  # if we cant add more nodes, stop the loop
+#                 print('add {} more nodes to rank'.format(len(to_rank[-1])))
+#             to_rank = utils.reduce_list(to_rank)
+#             # limit to 5 elements
+#             to_rank = to_rank[:min(5, len(to_rank))]
+#             print('ranking {}'.format(len(to_rank)))
+#             batch_rank = base_lib.rank_elements(to_rank)
+#             graph.update_graph(to_rank, batch_rank)
+#     return rank
